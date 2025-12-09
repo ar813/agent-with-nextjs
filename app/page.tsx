@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Send, Bot, User, Loader2, Sparkles, Menu, Plus, MessageSquare, Settings } from "lucide-react";
+import { Send, Bot, User, Loader2, Sparkles, Menu, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -72,11 +72,18 @@ export default function ChatbotUI() {
         text: botText,
       };
       setMessages((m) => [...m, botMsg]);
-    } catch (err: any) {
+    } catch (err: unknown) {
+      let errorMessage = "An unknown error occurred";
+      if (err instanceof Error) {
+        errorMessage = err.message;
+      } else if (typeof err === "string") {
+        errorMessage = err;
+      }
+
       const botMsg: Message = {
         id: Date.now() + 1,
         from: "bot",
-        text: `Error: ${err.message || err}`,
+        text: `Error: ${errorMessage}`,
       };
       setMessages((m) => [...m, botMsg]);
     } finally {
@@ -182,9 +189,11 @@ export default function ChatbotUI() {
                       <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
                         components={{
+                          // eslint-disable-next-line @typescript-eslint/no-unused-vars
                           code: ({ node, ...props }) => (
                             <code className="bg-black/30 px-1 py-0.5 rounded text-sm font-mono text-amber-200" {...props} />
                           ),
+                          // eslint-disable-next-line @typescript-eslint/no-unused-vars
                           pre: ({ node, ...props }) => (
                             <pre className="p-4 bg-black/40 rounded-lg overflow-x-auto my-3 border border-slate-800" {...props} />
                           ),
