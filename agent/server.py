@@ -12,7 +12,7 @@ app = FastAPI(title="Agent API")
 # Allow requests from your Next.js dev server
 origins = [
     "http://localhost:3000",
-    # add production origin(s) here, e.g. "https://yourdomain.com"
+    "https://agent-with-nextjs.vercel.app",
 ]
 
 app.add_middleware(
